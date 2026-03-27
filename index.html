@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Agents Meet the Cloud — Microsoft Netherlands</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" id="theme" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --azure: #0078d4;
+      --azure-light: #50a0e6;
+      --azure-glow: rgba(0, 120, 212, 0.3);
+      --accent: #3b82f6;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --violet: #8b5cf6;
+      --cyan: #06b6d4;
+      --orange: #f97316;
+      --surface: #18181b;
+      --surface-light: #27272a;
+    }
+
+    .reveal {
+      font-family: 'Inter', -apple-system, sans-serif;
+    }
+    .reveal .slides { text-align: center; }
+    .reveal .slides section {
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 40px 60px;
+      box-sizing: border-box;
+    }
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      text-transform: none;
+      letter-spacing: -0.02em;
+      width: 100%;
+      text-align: center;
+    }
+    .reveal h1 { font-size: 2.8em; }
+    .reveal h2 { font-size: 2em; }
+    .reveal h3 { font-size: 1.4em; }
+    .reveal p, .reveal li { font-weight: 400; line-height: 1.6; }
+    .reveal code, .reveal pre code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .reveal pre {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .reveal pre code {
+      padding: 20px 24px;
+      font-size: 0.65em;
+      line-height: 1.5;
+      border-radius: 12px;
+    }
+
+    /* Hero image styles */
+    .hero-img {
+      max-height: 200px;
+      margin: 16px auto;
+      filter: drop-shadow(0 8px 24px rgba(0,120,212,0.3));
+    }
+    .section-icon {
+      max-height: 120px;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 4px 16px rgba(0,120,212,0.25));
+    }
+    .inline-icon {
+      height: 48px;
+      vertical-align: middle;
+      margin: 0 8px;
+    }
+    .azure-service-icon {
+      height: 56px;
+      margin: 0 auto 8px;
+      display: block;
+    }
+
+    /* Section backgrounds */
+    .reveal .slides section[data-background-color] {
+      /* handled by reveal */
+    }
+
+    /* Custom classes */
+    .subtitle {
+      font-size: 0.55em !important;
+      font-weight: 400 !important;
+      color: rgba(255,255,255,0.5) !important;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .tagline {
+      font-size: 1.15em;
+      color: rgba(255,255,255,0.7);
+      font-weight: 300;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .highlight {
+      color: var(--azure-light);
+      font-weight: 600;
+    }
+    .highlight-emerald { color: var(--emerald); }
+    .highlight-amber { color: var(--amber); }
+    .highlight-red { color: var(--red); }
+    .highlight-violet { color: var(--violet); }
+    .highlight-cyan { color: var(--cyan); }
+    .highlight-orange { color: var(--orange); }
+
+    .big-emoji {
+      font-size: 3em;
+      display: block;
+      margin-bottom: 0.3em;
+    }
+    .huge-emoji {
+      font-size: 5em;
+      display: block;
+      margin-bottom: 0.2em;
+    }
+
+    /* Pill badge */
+    .pill {
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 999px;
+      font-size: 0.55em;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.8em;
+    }
+    .pill-azure {
+      background: rgba(0,120,212,0.15);
+      color: var(--azure-light);
+      border: 1px solid rgba(0,120,212,0.3);
+    }
+    .pill-emerald {
+      background: rgba(16,185,129,0.15);
+      color: var(--emerald);
+      border: 1px solid rgba(16,185,129,0.3);
+    }
+    .pill-red {
+      background: rgba(239,68,68,0.15);
+      color: var(--red);
+      border: 1px solid rgba(239,68,68,0.3);
+    }
+    .pill-amber {
+      background: rgba(245,158,11,0.15);
+      color: var(--amber);
+      border: 1px solid rgba(245,158,11,0.3);
+    }
+
+    /* Grid layouts */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      text-align: left;
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .three-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+      text-align: left;
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Card */
+    .card {
+      background: rgba(39,39,42,0.6);
+      border: 1px solid rgba(63,63,70,0.5);
+      border-radius: 16px;
+      padding: 28px;
+      text-align: left;
+    }
+    .card h4 {
+      font-size: 0.85em;
+      margin: 0 0 8px;
+    }
+    .card p {
+      font-size: 0.6em;
+      color: rgba(255,255,255,0.6);
+      margin: 0;
+    }
+
+    /* Scenario card */
+    .scenario-card {
+      background: rgba(39,39,42,0.5);
+      border: 1px solid rgba(63,63,70,0.4);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .scenario-card .sc-emoji { font-size: 2em; display: block; margin-bottom: 8px; }
+    .scenario-card .sc-title { font-size: 0.6em; font-weight: 700; color: #fff; }
+    .scenario-card .sc-sub { font-size: 0.45em; font-weight: 400; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+    /* Timeline */
+    .timeline {
+      text-align: left;
+      position: relative;
+      padding-left: 40px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 12px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--azure), transparent);
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 24px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -34px;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--azure);
+      border: 2px solid var(--azure-light);
+    }
+    .timeline-item h4 {
+      font-size: 0.7em;
+      margin: 0 0 4px;
+      font-weight: 700;
+    }
+    .timeline-item p {
+      font-size: 0.55em;
+      color: rgba(255,255,255,0.6);
+      margin: 0;
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      margin-top: 32px;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 2.5em;
+      font-weight: 900;
+      color: var(--azure-light);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.55em;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+    }
+
+    /* Wow badge */
+    .wow {
+      display: inline-block;
+      background: rgba(59,130,246,0.12);
+      border: 1px solid rgba(59,130,246,0.25);
+      color: var(--accent);
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 0.65em;
+      font-weight: 600;
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    /* Chat mockup */
+    .chat {
+      max-width: 560px;
+      margin: 0 auto;
+      text-align: left;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-msg {
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .chat-msg.user { justify-content: flex-end; }
+    .chat-bubble {
+      padding: 12px 18px;
+      border-radius: 16px;
+      font-size: 0.6em;
+      max-width: 360px;
+      line-height: 1.5;
+    }
+    .chat-msg.bot .chat-bubble {
+      background: rgba(39,39,42,0.8);
+      border: 1px solid rgba(63,63,70,0.5);
+      border-bottom-left-radius: 4px;
+    }
+    .chat-msg.user .chat-bubble {
+      background: rgba(0,120,212,0.2);
+      border: 1px solid rgba(0,120,212,0.3);
+      border-bottom-right-radius: 4px;
+    }
+    .chat-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7em;
+      flex-shrink: 0;
+    }
+    .chat-msg.bot .chat-avatar { background: rgba(59,130,246,0.2); }
+    .chat-msg.user .chat-avatar { background: rgba(255,255,255,0.1); }
+
+    /* Flow arrow */
+    .flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      width: 100%;
+      max-width: 960px;
+    }
+    .flow-step {
+      background: rgba(39,39,42,0.7);
+      border: 1px solid rgba(63,63,70,0.5);
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-size: 0.6em;
+      font-weight: 600;
+      text-align: center;
+      min-width: 120px;
+    }
+    .flow-arrow {
+      font-size: 1.2em;
+      color: var(--azure-light);
+    }
+
+    /* Section divider */
+    .section-divider h2 {
+      font-size: 3em;
+      margin-bottom: 0.2em;
+      text-align: center;
+    }
+    .section-divider p {
+      font-size: 0.8em;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+    }
+
+    /* Reveal overrides */
+    .reveal .slides section .fragment.current-visible.current-fragment {
+      display: block;
+    }
+    .reveal ul { list-style: none; padding-left: 0; text-align: left; max-width: 600px; margin: 0 auto; }
+    .two-col .reveal ul, .two-col ul, .three-col ul, .card ul { max-width: none; margin: 0; }
+    .reveal ul li {
+      font-size: 0.75em;
+      margin-bottom: 12px;
+      padding-left: 24px;
+      position: relative;
+    }
+    .reveal ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--azure);
+    }
+    .reveal .no-bullets li::before { display: none; }
+    .reveal .no-bullets li { padding-left: 0; }
+
+    /* Quote */
+    .big-quote {
+      font-size: 1.6em;
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(255,255,255,0.85);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.4;
+      text-align: center;
+    }
+    .big-quote .attribution {
+      font-size: 0.45em;
+      font-style: normal;
+      color: rgba(255,255,255,0.4);
+      margin-top: 16px;
+      display: block;
+    }
+
+    /* Progress bar colors */
+    .reveal .progress span { background: var(--azure); }
+    .reveal .controls button { color: var(--azure-light); }
+
+    /* GIF slide */
+    .gif-slide {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+    .gif-slide img {
+      border-radius: 16px;
+      max-height: 380px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.5);
+    }
+    .gif-slide .gif-caption {
+      font-size: 0.7em;
+      color: rgba(255,255,255,0.5);
+      margin-top: 16px;
+      font-style: italic;
+    }
+    .meme-overlay {
+      position: relative;
+      display: inline-block;
+    }
+    .meme-overlay .meme-text {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      font-family: 'Impact', 'Anton', sans-serif;
+      font-size: 1.4em;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      padding: 0 10px;
+    }
+    .meme-overlay .meme-text.top { top: 10px; }
+    .meme-overlay .meme-text.bottom { bottom: 10px; }
+
+    /* Footer */
+    .deck-footer {
+      position: fixed;
+      bottom: 16px;
+      left: 24px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.2);
+      font-family: 'Inter', sans-serif;
+      z-index: 100;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="deck-footer">AI Agents + Azure · Microsoft Netherlands</div>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- ============================================ -->
+      <!-- TITLE -->
+      <!-- ============================================ -->
+      <section data-background-gradient="linear-gradient(135deg, #09090b 0%, #0c1929 50%, #09090b 100%)">
+        <div style="display:flex; align-items:center; justify-content:center; gap:24px; margin-bottom:12px;">
+          <img src="https://img.icons8.com/fluency/96/microsoft.png" alt="Microsoft" style="height:42px;" />
+          <div class="pill pill-azure" style="margin:0;">Microsoft Netherlands · 2026</div>
+        </div>
+        <h1 style="font-size:2.4em; margin-bottom:0.15em;">
+          When <span style="color:var(--azure-light)">AI Agents</span><br/>Meet the <img src="https://img.icons8.com/fluency/96/azure-1.png" alt="Azure" style="height:64px; vertical-align:middle;" /> Cloud
+        </h1>
+        <p class="tagline" style="margin-top:8px;">
+          What happens when an AI can actually <em>do</em> things in your infrastructure
+        </p>
+        <div style="margin-top:32px; display:flex; align-items:center; justify-content:center; gap:12px;">
+          <img src="https://img.icons8.com/fluency/48/user-male-circle.png" alt="" style="height:28px;" />
+          <p style="font-size:0.5em; color:rgba(255,255,255,0.45); margin:0;">
+            Raj Balakrishnan · Sr. Cloud Solution Architect · Western Europe
+          </p>
+        </div>
+        <aside class="notes">
+          Welcome everyone. Today I'm going to show you something that will change how you think about customer meetings, demos, and Azure itself. This isn't about a specific tool — it's about a pattern that's coming fast: AI agents with real cloud access. And Azure is where it gets interesting.
+        </aside>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- THE PROBLEM -->
+      <!-- ============================================ -->
+      <section>
+        <section data-background-color="#09090b">
+          <span class="big-emoji">🤔</span>
+          <h2>A question</h2>
+          <p class="tagline fragment">
+            How long does it take to go from<br/>
+            <span class="highlight">"I have an idea"</span> to<br/>
+            <span class="highlight">"It's running in Azure"</span>?
+          </p>
+          <aside class="notes">
+            Let me ask you something. How long does it take your customers to go from an idea to actually running in Azure? I'm talking everything — architecture, infrastructure, app code, deployment.
+          </aside>
+        </section>
+
+        <section data-background-color="#09090b">
+          <h3 style="color:rgba(255,255,255,0.4); font-weight:400;">The typical journey</h3>
+          <br/>
+          <div class="flow">
+            <div class="flow-step">💬<br/>Meeting</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">📝<br/>Requirements</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">📐<br/>Architecture</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">⌨️<br/>IaC</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">🚀<br/>Deploy</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">🖥️<br/>App</div>
+          </div>
+          <br/>
+          <p class="fragment" style="font-size:1.8em; font-weight:800; color:var(--amber);">
+            Weeks. Sometimes months.
+          </p>
+          <aside class="notes">
+            Typically it's meeting, write up requirements, design architecture, write infrastructure as code, deploy, then build the app. That's weeks. Sometimes months. What if that entire pipeline happened in a single conversation?
+          </aside>
+        </section>
+
+        <!-- GIF: Waiting skeleton -->
+        <section data-background-color="#09090b">
+          <div class="gif-slide">
+            <div class="meme-overlay">
+              <img data-src="https://media.giphy.com/media/QBd2kLB5qDmysEXre9/giphy.gif" alt="Waiting skeleton" />
+              <div class="meme-text top">The customer</div>
+              <div class="meme-text bottom">Waiting for their POC</div>
+            </div>
+          </div>
+        </section>
+
+        <section data-background-color="#09090b">
+          <h3 style="color:rgba(255,255,255,0.4); font-weight:400;">What if it looked like this?</h3>
+          <br/>
+          <div class="flow">
+            <div class="flow-step" style="border-color:var(--azure); background:rgba(0,120,212,0.08);">
+              💬<br/>Conversation
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step" style="border-color:var(--azure); background:rgba(0,120,212,0.08);">
+              🚀<br/>Running in Azure
+            </div>
+          </div>
+          <br/>
+          <p class="fragment" style="font-size:1.8em; font-weight:800; color:var(--emerald);">
+            45 minutes. One meeting.
+          </p>
+          <aside class="notes">
+            What if the entire journey collapsed into a single conversation? Customer describes what they need, and by the end of the meeting, it's running. That's what I'm here to show you.
+          </aside>
+        </section>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- WHAT IS OPENCLAW -->
+      <!-- ============================================ -->
+      <section>
+        <section data-background-color="#09090b">
+          <span class="big-emoji">🤖</span>
+          <h2>The <span class="highlight">Agentic</span> Pattern</h2>
+          <p class="tagline">
+            AI agents that don't just talk — they <em>act</em>.<br/>
+            With real access to your cloud.
+          </p>
+          <aside class="notes">
+            This is the pattern. AI agents that don't just generate text — they act. They have real authenticated access to Azure CLI, GitHub, APIs, databases. Copilot, Claude Code, OpenClaw, custom agents — the tool doesn't matter. The pattern does. Today I'm using an open-source agent called OpenClaw as the demo vehicle, but everything you see applies to any agent with Azure access.
+          </aside>
+        </section>
+
+        <section data-background-color="#09090b">
+          <h3>The architecture pattern</h3>
+          <br/>
+          <div class="three-col">
+            <div class="card">
+              <img src="https://img.icons8.com/fluency/64/chat.png" alt="" style="height:48px; margin-bottom:12px;" />
+              <h4>Conversational</h4>
+              <p>Natural language in — Telegram, Teams, WhatsApp, terminal. Any surface.</p>
+            </div>
+            <div class="card">
+              <img src="https://img.icons8.com/fluency/64/key.png" alt="" style="height:48px; margin-bottom:12px;" />
+              <h4>Authenticated</h4>
+              <p>Real Azure CLI, GitHub, Graph API access. Not simulated — actual credentials with proper RBAC.</p>
+            </div>
+            <div class="card">
+              <img src="https://img.icons8.com/fluency/64/brain.png" alt="" style="height:48px; margin-bottom:12px;" />
+              <h4>Contextual</h4>
+              <p>Knows your environment, subscriptions, cost history, incident patterns. Gets smarter over time.</p>
+            </div>
+          </div>
+          <p style="font-size:0.55em; color:rgba(255,255,255,0.35); margin-top:24px;">Works with: GitHub Copilot · Copilot Studio · Claude Code · OpenClaw · Custom agents</p>
+          <aside class="notes">
+            Three pillars. Conversational — natural language through any surface. Authenticated — real Azure access with proper RBAC. Contextual — it knows your environment. This pattern works with any agent framework — Copilot, Claude, custom builds. The demo today uses OpenClaw, an open-source agent, but the Azure integration patterns are universal.
+          </aside>
+        </section>
+
+        <section data-background-color="#09090b">
+          <h3>The agent loop</h3>
+          <br/>
+          <div class="flow">
+            <div class="flow-step"><img src="https://img.icons8.com/fluency/48/telegram-app.png" alt="" style="height:32px; display:block; margin:0 auto 6px;" />Any Surface<br/><small style="color:rgba(255,255,255,0.4)">Teams / Telegram / CLI</small></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step" style="border-color:var(--azure); background:rgba(0,120,212,0.1);">
+              <img src="https://img.icons8.com/fluency/48/robot-2.png" alt="" style="height:32px; display:block; margin:0 auto 6px;" />AI Agent<br/><small style="color:rgba(255,255,255,0.4)">Any framework</small>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><img src="https://img.icons8.com/fluency/48/console.png" alt="" style="height:32px; display:block; margin:0 auto 6px;" />Tools<br/><small style="color:rgba(255,255,255,0.4)">az / gh / Graph API</small></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step" style="border-color:var(--azure);">
+              <img src="https://img.icons8.com/fluency/48/azure-1.png" alt="" style="height:32px; display:block; margin:0 auto 6px;" />Azure<br/><small style="color:rgba(255,255,255,0.4)">Your subscription</small>
+            </div>
+          </div>
+          <br/>
+          <p style="font-size:0.6em; color:rgba(255,255,255,0.4);">
+            Azure is the platform that makes agents useful · Identity · APIs · Cost Management · Monitoring
+          </p>
+          <aside class="notes">
+            The loop is simple. Input from any surface, processed by any AI agent, executing real tools against Azure. The magic isn't the agent — it's the platform underneath. Azure's identity, APIs, cost management, and monitoring are what turn a chatbot into something that actually works. Let me prove it.
+          </aside>
+        </section>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- SECTION: LIVE DEMO CONCEPT -->
+      <!-- ============================================ -->
+      <section data-background-gradient="linear-gradient(135deg, #09090b 0%, #0a1628 100%)">
+        <div class="section-divider">
+          <div class="pill pill-azure">Live Demo</div>
+          <h2>Let's build something.<br/><span style="color:var(--azure-light)">Right now.</span></h2>
+          <p>No slides from here. Just a conversation and an Azure subscription.</p>
+        </div>
+        <aside class="notes">
+          Alright, enough slides. Let me show you. I'm going to have a conversation with OpenClaw, and we're going to build and deploy something to Azure. Live. Right now.
+        </aside>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- DEMO: CONVERSATION TO ARCHITECTURE -->
+      <!-- ============================================ -->
+      <section>
+        <section data-background-color="#09090b">
+          <div class="pill pill-azure">Step 1</div>
+          <h2>The Conversation</h2>
+          <p class="tagline">A customer describes what they need.<br/>OpenClaw listens.</p>
+          <aside class="notes">
+            Step 1. The customer — that's me, or a volunteer from the audience — just talks. Describes the use case in plain language. Watch what happens.
+          </aside>
+        </section>
+
+        <section data-background-color="#09090b">
+          <div class="chat">
+            <div class="chat-msg user">
+              <div class="chat-bubble">
+                We need a web app where freelancers can manage contracts, generate invoices, and track time. It needs user auth and a database.
+              </div>
+              <div class="chat-avatar">👤</div>
+            </div>
+            <div class="chat-msg bot fragment">
+              <div class="chat-avatar">🐾</div>
+              <div class="chat-bubble">
+                Got it. I'll design this with: <strong>Next.js</strong> on App Service, <strong>Azure SQL</strong> for data, <strong>Blob Storage</strong> for file uploads, <strong>AD B2C</strong> for auth, and an <strong>Azure Function</strong> for Stripe webhooks. Let me draw the architecture...
+              </div>
+            </div>
+          </div>
+          <div class="wow fragment">
+            🎯 Plain English → structured architecture in seconds
+          </div>
+          <aside class="notes">
+            The customer just described what they need. No technical language. And OpenClaw immediately breaks it down into Azure services, identifies the right components, and starts drawing the architecture. This is product discovery and solution architecture happening simultaneously.
+          </aside>
+        </section>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- DEMO: EXCALIDRAW ARCHITECTURE -->
+      <!-- ============================================ -->
+      <section>
+        <section data-background-color="#09090b">
+          <div class="pill pill-azure">Step 2</div>
+          <h2>Architecture <span class="highlight">Materializes</span></h2>
+          <p class="tagline">The conversation becomes a visual architecture.<br/>In Excalidraw. In real-time.</p>
+          <aside class="notes">
+            Step 2. OpenClaw generates an Excalidraw diagram of the architecture — live, on screen. The customer sees their words turning into boxes and arrows. This is the first wow moment.
+          </aside>
+        </section>
+
+        <section data-background-color="#09090b">
+          <h3 style="font-size:1em; color:rgba(255,255,255,0.4);">Generated architecture</h3>
+          <br/>
+          <div class="flow" style="flex-wrap:wrap; gap:12px;">
+            <div class="flow-step" style="border-color:var(--azure);"><img src="https://img.icons8.com/fluency/48/globe.png" alt="" style="height:28px; display:block; margin:0 auto 4px;" />Next.js<br/><small style="color:rgba(255,255,255,0.3)">App Service</small></div>
+            <div class="flow-arrow">↔</div>
+            <div class="flow-step" style="border-color:var(--cyan);"><img src="https://img.icons8.com/fluency/48/database.png" alt="" style="height:28px; display:block; margin:0 auto 4px;" />Azure SQL<br/><small style="color:rgba(255,255,255,0.3)">Contracts & Invoices</small></div>
+            <div class="flow-arrow">↔</div>
+            <div class="flow-step" style="border-color:var(--violet);"><img src="https://img.icons8.com/fluency/48/cloud-storage.png" alt="" style="height:28px; display:block; margin:0 auto 4px;" />Blob Storage<br/><small style="color:rgba(255,255,255,0.3)">File uploads</small></div>
+          </div>
+          <br/>
+          <div class="flow" style="gap:12px;">
+            <div class="flow-step" style="border-color:var(--emerald);"><img src="https://img.icons8.com/fluency/48/lock-2.png" alt="" style="height:28px; display:block; margin:0 auto 4px;" />AD B2C<br/><small style="color:rgba(255,255,255,0.3)">Auth</small></div>
+            <div class="flow-arrow">↔</div>
+            <div class="flow-step" style="border-color:var(--orange);"><img src="https://img.icons8.com/fluency/48/lightning-bolt.png" alt="" style="height:28px; display:block; margin:0 auto 4px;" />Functions<br/><small style="color:rgba(255,255,255,0.3)">Stripe webhooks</small></div>
+            <div class="flow-arrow">↔</div>
+            <div class="flow-step" style="border-color:var(--amber);"><img src="https://img.icons8.com/fluency/48/combo-chart.png" alt="" style="height:28px; display:block; margin:0 auto 4px;" />App Insights<br/><small style="color:rgba(255,255,255,0.3)">Monitoring</small></div>
+          </div>
+          <aside class="notes">
+            Here's what the architecture looks like. Next.js on App Service as the frontend, Azure SQL for data, Blob Storage for files, AD B2C for authentication, Azure Functions for payment webhooks, and App Insights for monitoring. All drawn from a single paragraph of requirements.
+          </aside>
+        </section>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- DEMO: INFRASTRUCTURE AS CODE -->
+      <!-- ============================================ -->
+      <section>
+        <section data-background-color="#09090b">
+          <div class="pill pill-azure">Step 3</div>
+          <h2>Infrastructure <span class="highlight">as Code</span></h2>
+          <p class="tagline">The architecture becomes deployable Bicep.<br/>Automatically.</p>
+          <aside class="notes">
+            Step 3. Now OpenClaw converts that architecture into Bicep templates. Real, deployable infrastructure as code. Let me show you what it generates.
+          </aside>
+        </section>
+
+        <section data-background-color="#0d1117">
+          <h3 style="font-size:0.8em; color:rgba(255,255,255,0.4);">Generated Bicep — main.bicep</h3>
+          <pre><code class="language-bicep" data-trim data-noescape>
+// Auto-generated by OpenClaw from conversation
+// Customer: Freelancer SaaS platform
+
+@description('Azure region for all resources')
+param location string = resourceGroup().location
+
+@description('App name prefix')
+param appName string = 'freelancer-saas'
+
+// App Service Plan
+resource appServicePlan 'Microsoft.Web/serverfarms@2023-12-01' = {
+  name: '${appName}-plan'
+  location: location
+  sku: {
+    name: 'B1'
+    tier: 'Basic'
+  }
+  kind: 'linux'
+  properties: {
+    reserved: true
+  }
+}
+
+// App Service — Next.js
+resource webApp 'Microsoft.Web/sites@2023-12-01' = {
+  name: '${appName}-web'
+  location: location
+  properties: {
+    serverFarmId: appServicePlan.id
+    siteConfig: {
+      linuxFxVersion: 'NODE|20-lts'
+      appSettings: [
+        { name: 'DATABASE_URL', value: sqlServer.properties.fullyQualifiedDomainName }
+        { name: 'AZURE_STORAGE_CONNECTION', value: storageAccount.properties.primaryEndpoints.blob }
+      ]
+    }
+  }
+}
+          </code></pre>
+          <aside class="notes">
+            This is the Bicep that OpenClaw generates. Notice — it's not template code. It's specific to this customer's requirements. App Service Plan on Linux, Node 20, with the right app settings wired up to the SQL server and storage account. Let me show you the database part.
+          </aside>
+        </section>
+
+        <section data-background-color="#0d1117">
+          <h3 style="font-size:0.8em; color:rgba(255,255,255,0.4);">Generated Bicep — database & storage</h3>
+          <pre><code class="language-bicep" data-trim data-noescape>
+// Azure SQL Server
+resource sqlServer 'Microsoft.Sql/servers@2023-08-01-preview' = {
+  name: '${appName}-sql'
+  location: location
+  properties: {
+    administratorLogin: 'appadmin'
+    administratorLoginPassword: sqlPassword
+  }
+}
+
+resource sqlDb 'Microsoft.Sql/servers/databases@2023-08-01-preview' = {
+  parent: sqlServer
+  name: 'freelancer-db'
+  location: location
+  sku: {
+    name: 'Basic'
+    tier: 'Basic'
+  }
+}
+
+// Storage Account — file uploads
+resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+  name: '${replace(appName, '-', '')}stor'
+  location: location
+  sku: { name: 'Standard_LRS' }
+  kind: 'StorageV2'
+}
+
+// Application Insights — monitoring from day one
+resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
+  name: '${appName}-insights'
+  location: location
+  kind: 'web'
+  properties: { Application_Type: 'web' }
+}
+          </code></pre>
+          <aside class="notes">
+            SQL Server with a Basic tier database — cost-effective for a startup. Storage account for file uploads. App Insights wired up from day one. All of this generated from that one paragraph the customer said. And now — we deploy it.
+          </aside>
+        </section>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- DEMO: DEPLOY -->
+      <!-- ============================================ -->
+      <section>
+        <section data-background-color="#09090b">
+          <div class="pill pill-azure">Step 4</div>
+          <h2><span class="highlight">Deploy</span> to Azure</h2>
+          <p class="tagline">One command. Real infrastructure.<br/>In front of the customer.</p>
+          <aside class="notes">
+            Step 4. We deploy. This is where it gets real. OpenClaw runs the deployment live.
+          </aside>
+        </section>
+
+        <section data-background-color="#0d1117">
+          <h3 style="font-size:0.8em; color:rgba(255,255,255,0.4);">Deployment</h3>
+          <pre><code class="language-bash" data-trim data-noescape>
+# OpenClaw executes:
+az group create \
+  --name rg-freelancer-saas \
+  --location westeurope
+
+az deployment group create \
+  --resource-group rg-freelancer-saas \
+  --template-file main.bicep \
+  --parameters appName=freelancer-saas
+
+# Output:
+# ✓ App Service Plan ............ created (12s)
+# ✓ App Service ................. created (18s)
+# ✓ SQL Server .................. created (45s)
+# ✓ SQL Database ................ created (22s)
+# ✓ Storage Account ............. created (8s)
+# ✓ Application Insights ........ created (6s)
+#
+# 🚀 Deployment complete in 1m 51s
+# 🌐 https://freelancer-saas-web.azurewebsites.net
+          </code></pre>
+          <div class="wow fragment">
+            🎯 From conversation to running infrastructure: ~2 minutes
+          </div>
+          <aside class="notes">
+            Resource group created. Bicep deployed. Six Azure resources provisioned. Under 2 minutes. The customer can see each resource appearing in the Azure portal in real-time.
+          </aside>
+        </section>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- DEMO: APP GOES LIVE -->
+      <!-- ============================================ -->
+      <section>
+        <section data-background-color="#09090b">
+          <div class="pill pill-emerald">Step 5</div>
+          <h2>The app <span class="highlight-emerald">goes live</span></h2>
+          <p class="tagline">OpenClaw scaffolds the application code,<br/>deploys it, and hands over a URL.</p>
+          <aside class="notes">
+            Step 5. Infrastructure is running. Now OpenClaw scaffolds the actual application — Next.js with auth, a dashboard, contract creation, invoice generator — and deploys it to the App Service we just created.
+          </aside>
+        </section>
+
+        <section data-background-color="#0d1117">
+          <h3 style="font-size:0.8em; color:rgba(255,255,255,0.4);">App scaffolding</h3>
+          <pre><code class="language-bash" data-trim data-noescape>
+# OpenClaw scaffolds:
+npx create-next-app freelancer-saas --typescript --tailwind
+
+# Generates pages:
+#   /           → Landing page
+#   /dashboard  → Contract overview
+#   /contracts  → Create & manage contracts
+#   /invoices   → Generate & send invoices
+#   /api/stripe → Webhook handler
+
+# Deploys to App Service:
+az webapp deploy \
+  --resource-group rg-freelancer-saas \
+  --name freelancer-saas-web \
+  --src-path ./build.zip \
+  --type zip
+
+# ✓ App deployed
+# 🌐 https://freelancer-saas-web.azurewebsites.net
+          </code></pre>
+          <aside class="notes">
+            Full Next.js app. Landing page, dashboard, contract management, invoice generator. Deployed to the App Service. The customer can open it on their phone right now. In the same meeting where they described the idea.
+          </aside>
+        </section>
+
+        <section data-background-color="#09090b">
+          <span class="huge-emoji">🤯</span>
+          <h2>That just happened.</h2>
+          <p class="tagline">
+            Customer described an idea in plain English.<br/>
+            <span class="highlight">10 minutes later, it's running in Azure.</span>
+          </p>
+          <aside class="notes">
+            Let that sink in. A customer walked in with an idea. They described it in plain English. And before the coffee got cold, it's running in Azure. Architecture designed, infrastructure deployed, app live, URL in hand.
+          </aside>
+        </section>
+
+        <!-- GIF: Mind blown -->
+        <section data-background-color="#09090b">
+          <div class="gif-slide">
+            <img data-src="https://media.giphy.com/media/xT0xeJpnrWC3XWblEk/giphy.gif" alt="Mind blown" style="max-height:380px;" />
+            <p class="gif-caption">The audience right now</p>
+          </div>
+        </section>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- SECTION: BEYOND BUILDING -->
+      <!-- ============================================ -->
+      <section data-background-gradient="linear-gradient(135deg, #09090b 0%, #1a0a0a 100%)">
+        <div class="section-divider">
+          <div class="pill pill-red">Operations</div>
+          <h2>But building is<br/><span style="color:var(--red);">only half the story.</span></h2>
+          <p>What happens after deployment?</p>
+        </div>
+        <aside class="notes">
+          Building is impressive. But your customers don't just build — they operate. They get woken up at 3 AM. They get budget alerts. Let me show you what OpenClaw does AFTER deployment.
+        </aside>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- INCIDENT RESPONSE -->
+      <!-- ============================================ -->
+      <section>
+        <section data-background-color="#09090b">
+          <span class="big-emoji">🚨</span>
+          <h2>It's 3 AM.<br/>Your app is <span class="highlight-red">down</span>.</h2>
+          <p class="tagline">OpenClaw detects, diagnoses, and fixes<br/>— from your phone.</p>
+          <aside class="notes">
+            Imagine this. It's 3 AM. Your phone buzzes. Not a generic PagerDuty alert — it's OpenClaw, and it's already halfway through diagnosing the problem.
+          </aside>
+        </section>
+
+        <!-- GIF: This is fine -->
+        <section data-background-color="#09090b">
+          <div class="gif-slide">
+            <div class="meme-overlay">
+              <img data-src="https://media.giphy.com/media/NTur7XlVDUdqM/giphy.gif" alt="This is fine" />
+              <div class="meme-text bottom">Your on-call engineer</div>
+            </div>
+          </div>
+        </section>
+
+        <section data-background-color="#09090b">
+          <div class="chat">
+            <div class="chat-msg bot">
+              <div class="chat-avatar">🐾</div>
+              <div class="chat-bubble">
+                ⚠️ <strong>Alert:</strong> freelancer-saas-web returning 500s.<br/>94% error rate in last 5 min.<br/><br/>
+                I've checked: looks like DATABASE_URL was changed 12 min ago to a non-existent server. Want me to roll back?
+              </div>
+            </div>
+            <div class="chat-msg user fragment">
+              <div class="chat-bubble">Roll it back</div>
+              <div class="chat-avatar">👤</div>
+            </div>
+            <div class="chat-msg bot fragment">
+              <div class="chat-avatar">🐾</div>
+              <div class="chat-bubble">
+                ✅ Config reverted. App restarted.<br/>
+                Monitoring... <strong>0% error rate. 142ms response time.</strong><br/><br/>
+                Post-incident report generated → <a href="#" style="color:var(--azure-light)">Notion link</a>
+              </div>
+            </div>
+          </div>
+          <aside class="notes">
+            It already diagnosed the root cause — a bad config change — and it's asking for permission to roll back. Two words: "Roll it back." Done. App healthy. Incident report generated. From your bed. On your phone. The entire war room is a chat thread.
+          </aside>
+        </section>
+
+        <section data-background-color="#0d1117">
+          <h3 style="font-size:0.8em; color:rgba(255,255,255,0.4);">What OpenClaw ran under the hood</h3>
+          <pre><code class="language-bash" data-trim data-noescape>
+# 1. Detected via Application Insights alert
+az monitor app-insights query --app freelancer-saas-insights \
+  --analytics-query "requests | where resultCode >= 500 | count"
+
+# 2. Pulled recent config changes
+az webapp config appsettings list \
+  --name freelancer-saas-web --resource-group rg-freelancer-saas
+
+# 3. Compared with deployment history
+az webapp deployment list --name freelancer-saas-web \
+  --resource-group rg-freelancer-saas
+
+# 4. Identified root cause: DATABASE_URL changed at 02:48 UTC
+# 5. Rolled back config
+az webapp config appsettings set \
+  --name freelancer-saas-web \
+  --resource-group rg-freelancer-saas \
+  --settings DATABASE_URL="Server=freelancer-saas-sql.database..."
+
+# 6. Restarted
+az webapp restart --name freelancer-saas-web \
+  --resource-group rg-freelancer-saas
+
+# 7. Verified health
+curl -s -o /dev/null -w "%{http_code}" \
+  https://freelancer-saas-web.azurewebsites.net/api/health
+# → 200
+          </code></pre>
+          <aside class="notes">
+            Here's what actually happened behind that simple chat exchange. Seven steps. Query App Insights, check config, compare deployment history, identify root cause, roll back, restart, verify. What would take an on-call engineer 30 minutes happened in 2.
+          </aside>
+        </section>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- FINOPS -->
+      <!-- ============================================ -->
+      <section>
+        <section data-background-color="#09090b">
+          <span class="big-emoji">💰</span>
+          <h2>Your bill is <span class="highlight-amber">€40K/month</span>.</h2>
+          <p class="tagline">OpenClaw finds the waste.<br/>And fixes it. Live.</p>
+          <aside class="notes">
+            Here's another one. Cost optimization. Your customer's Azure bill has tripled. They're angry. Let's show them what an AI agent can do with Azure Cost Management.
+          </aside>
+        </section>
+
+        <section data-background-color="#0d1117">
+          <h3 style="font-size:0.8em; color:rgba(255,255,255,0.4);">Cost analysis in seconds</h3>
+          <pre><code class="language-bash" data-trim data-noescape>
+# OpenClaw queries Cost Management
+az cost export create --name monthly-analysis ...
+az consumption usage list --start-date 2026-01-01 --end-date 2026-03-22
+
+# Findings:
+# ┌─────────────────────────────────────┬──────────┬─────────┐
+# │ Issue                               │ Monthly  │ Savings │
+# ├─────────────────────────────────────┼──────────┼─────────┤
+# │ 12 VMs at 8% CPU (D4s_v5 → B2ms)   │ €6,200   │  €4,800 │
+# │ Dev/test running 24/7               │ €3,400   │  €2,600 │
+# │ 23 orphaned disks                   │ €1,100   │  €1,100 │
+# │ 8 unused public IPs                 │ €320     │    €320 │
+# │ No reserved instances               │ €8,900   │  €3,200 │
+# │ Premium storage on cold data        │ €2,100   │  €1,400 │
+# ├─────────────────────────────────────┼──────────┼─────────┤
+# │ TOTAL IDENTIFIED SAVINGS            │          │ €13,420 │
+# └─────────────────────────────────────┴──────────┴─────────┘
+          </code></pre>
+          <aside class="notes">
+            In seconds, OpenClaw identifies six categories of waste. Overprovisioned VMs, dev environments that never sleep, orphaned resources, missing reservations. That's €13,000 a month — €160K a year. And it can fix most of these right now.
+          </aside>
+        </section>
+
+        <section data-background-color="#09090b">
+          <div class="stats-row">
+            <div class="stat">
+              <div class="stat-number" style="color:var(--amber)">€160K</div>
+              <div class="stat-label">Annual savings identified</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number" style="color:var(--emerald)">12 min</div>
+              <div class="stat-label">Time to find & fix</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number" style="color:var(--azure-light)">1</div>
+              <div class="stat-label">Conversation</div>
+            </div>
+          </div>
+          <br/>
+          <div class="wow">
+            🎯 Not recommendations in a PDF — real savings, implemented live
+          </div>
+          <aside class="notes">
+            €160K per year. Found in 12 minutes. Implemented in a single conversation. Not a report that sits in someone's inbox for 3 weeks. Actual changes, with guardrails, with the customer watching.
+          </aside>
+        </section>
+
+        <!-- GIF: Money printer / shut up and take my money -->
+        <section data-background-color="#09090b">
+          <div class="gif-slide">
+            <div class="meme-overlay">
+              <img data-src="https://media.giphy.com/media/sDcfxFDozb3bO/giphy.gif" alt="Shut up and take my money" />
+              <div class="meme-text top">€160K saved per year</div>
+              <div class="meme-text bottom">The CFO right now</div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- SECTION: THE SCENARIOS -->
+      <!-- ============================================ -->
+      <section data-background-gradient="linear-gradient(135deg, #09090b 0%, #0f0b1e 100%)">
+        <div class="section-divider">
+          <div class="pill pill-azure">The Possibilities</div>
+          <h2>Six scenarios.<br/><span style="color:var(--violet)">Infinite possibilities.</span></h2>
+          <p>Each one a complete 45-minute demo you can run with customers.</p>
+        </div>
+        <aside class="notes">
+          What I've just shown you is one way to use this. But there are many more. We've designed six complete scenarios — each one a 45-minute demo you could run in a customer meeting. Let me walk you through them quickly.
+        </aside>
+      </section>
+
+      <!-- SCENARIO OVERVIEW -->
+      <section data-background-color="#09090b">
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; max-width:960px; margin:0 auto;">
+          <div class="scenario-card" style="border-color:rgba(16,185,129,0.3);">
+            <span class="sc-emoji">🏥</span>
+            <div class="sc-title" style="color:var(--emerald)">Healthcare Startup</div>
+            <div class="sc-sub">Napkin → HIPAA-compliant platform</div>
+          </div>
+          <div class="scenario-card" style="border-color:rgba(239,68,68,0.3);">
+            <span class="sc-emoji">🚨</span>
+            <div class="sc-title" style="color:var(--red)">Incident Response</div>
+            <div class="sc-sub">AI-driven war room from your phone</div>
+          </div>
+          <div class="scenario-card" style="border-color:rgba(245,158,11,0.3);">
+            <span class="sc-emoji">💰</span>
+            <div class="sc-title" style="color:var(--amber)">FinOps War Room</div>
+            <div class="sc-sub">Find & fix €40K/month in waste</div>
+          </div>
+          <div class="scenario-card" style="border-color:rgba(6,182,212,0.3);">
+            <span class="sc-emoji">🏭</span>
+            <div class="sc-title" style="color:var(--cyan)">Manufacturing IoT</div>
+            <div class="sc-sub">Factory floor in your pocket</div>
+          </div>
+          <div class="scenario-card" style="border-color:rgba(139,92,246,0.3);">
+            <span class="sc-emoji">🎓</span>
+            <div class="sc-title" style="color:var(--violet)">The Meta-Demo</div>
+            <div class="sc-sub">Build WITH the audience. No prep.</div>
+          </div>
+          <div class="scenario-card" style="border-color:rgba(249,115,22,0.3);">
+            <span class="sc-emoji">🚀</span>
+            <div class="sc-title" style="color:var(--orange)">Startup Accelerator</div>
+            <div class="sc-sub">Pitch → production in one meeting</div>
+          </div>
+        </div>
+        <aside class="notes">
+          Healthcare — build a HIPAA-compliant platform from a napkin sketch. Incident response — staged outage, AI-driven war room. FinOps — find and fix cost waste live. Manufacturing IoT — perfect for the Netherlands, think ASML, Philips. The Meta-Demo — walk in with nothing, build with the audience. Startup Accelerator — turn a pitch into a running MVP. Each one is fully documented with step-by-step flows.
+        </aside>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- DEEP DIVE: IoT (NL specific) -->
+      <!-- ============================================ -->
+      <section>
+        <section data-background-color="#09090b">
+          <span class="big-emoji">🏭</span>
+          <h2>Manufacturing IoT</h2>
+          <p class="tagline" style="color:var(--cyan)">
+            Your factory floor, in your pocket.
+          </p>
+          <p style="font-size:0.65em; color:rgba(255,255,255,0.4); margin-top:16px;">
+            Perfect for the Netherlands — Philips, ASML, NXP, Vanderlande
+          </p>
+          <aside class="notes">
+            Let me zoom into one that's especially relevant here. The Netherlands is a manufacturing powerhouse. Imagine showing a plant manager that they can manage their factory from WhatsApp.
+          </aside>
+        </section>
+
+        <section data-background-color="#0d1117">
+          <h3 style="font-size:0.8em; color:rgba(255,255,255,0.4);">IoT pipeline — deployed in 10 minutes</h3>
+          <pre><code class="language-bicep" data-trim data-noescape>
+// IoT Hub for device connectivity
+resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
+  name: '${appName}-iothub'
+  location: location
+  sku: { name: 'S1', capacity: 1 }
+}
+
+// Stream Analytics for real-time anomaly detection
+resource streamJob 'Microsoft.StreamAnalytics/streamingjobs@2021-10-01' = {
+  name: '${appName}-stream'
+  location: location
+  properties: {
+    sku: { name: 'Standard' }
+  }
+}
+
+// Anomaly detection query
+// SELECT deviceId, AVG(temperature) as avgTemp,
+//        System.Timestamp() as windowEnd
+// FROM iothub TIMESTAMP BY EventEnqueuedUtcTime
+// GROUP BY deviceId, TumblingWindow(minute, 2)
+// HAVING AVG(temperature) > 80
+          </code></pre>
+          <aside class="notes">
+            IoT Hub for device connectivity, Stream Analytics for real-time processing with an anomaly detection query. When a machine's temperature exceeds 80 degrees, it triggers an alert. All deployed in minutes.
+          </aside>
+        </section>
+
+        <section data-background-color="#09090b">
+          <h3>The <span class="highlight-cyan">WhatsApp moment</span></h3>
+          <br/>
+          <div class="chat">
+            <div class="chat-msg bot">
+              <div class="chat-avatar">🐾</div>
+              <div class="chat-bubble">
+                🔴 <strong>CNC-042</strong> temperature critical: <strong>94°C</strong> (threshold: 80°C).<br/>
+                Vibration also elevated: 12.4mm/s.<br/><br/>
+                Recommend immediate shutdown for inspection.
+              </div>
+            </div>
+            <div class="chat-msg user fragment">
+              <div class="chat-bubble">Shut it down and notify maintenance</div>
+              <div class="chat-avatar">👤</div>
+            </div>
+            <div class="chat-msg bot fragment">
+              <div class="chat-avatar">🐾</div>
+              <div class="chat-bubble">
+                ✅ Shutdown command sent to CNC-042 device twin.<br/>
+                📋 Maintenance ticket #4891 created.<br/>
+                📱 Notification sent to maintenance team.
+              </div>
+            </div>
+          </div>
+          <aside class="notes">
+            This is the moment that sells it. A plant manager gets a WhatsApp message: machine overheating. They reply with two words. Machine shuts down safely, maintenance ticket created, team notified. From their phone. At lunch. This is the slide people take photos of.
+          </aside>
+        </section>
+
+        <!-- GIF: Factory robot / automation -->
+        <section data-background-color="#09090b">
+          <div class="gif-slide">
+            <div class="meme-overlay">
+              <img data-src="https://media.giphy.com/media/RbDKaczqWovIugyJmW/giphy.gif" alt="Robot automation" />
+              <div class="meme-text bottom">Managing a factory from WhatsApp</div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- THE META-DEMO CONCEPT -->
+      <!-- ============================================ -->
+      <section>
+        <section data-background-color="#09090b">
+          <span class="big-emoji">🎓</span>
+          <h2>The <span class="highlight-violet">boldest</span> option</h2>
+          <p class="tagline">
+            Walk in with nothing.<br/>
+            Build everything with the audience.
+          </p>
+          <aside class="notes">
+            And here's the boldest play. No slides. No prepared demo. Walk into a customer meeting and say: "What should we build?" Then build it. Together. Live. Maximum risk, maximum reward.
+          </aside>
+        </section>
+
+        <section data-background-color="#09090b">
+          <div class="big-quote">
+            "I have 45 minutes and an AI agent.<br/>
+            <span class="highlight-violet">What should we build?</span>"
+            <span class="attribution">— The opening line that changes everything</span>
+          </div>
+          <br/>
+          <div class="timeline fragment">
+            <div class="timeline-item">
+              <h4>Audience brainstorms (8 min)</h4>
+              <p>They pick the use case. They own it.</p>
+            </div>
+            <div class="timeline-item">
+              <h4>Architecture debate (10 min)</h4>
+              <p>SEs challenge the design. OpenClaw debates back with reasoning.</p>
+            </div>
+            <div class="timeline-item">
+              <h4>Deploy to Azure (15 min)</h4>
+              <p>Their idea. Their architecture. Running in their cloud.</p>
+            </div>
+            <div class="timeline-item">
+              <h4>Take it home (7 min)</h4>
+              <p>GitHub repo, Notion docs, cost projection. "Here's what we built today."</p>
+            </div>
+          </div>
+          <aside class="notes">
+            8 minutes of brainstorming. 10 minutes of architecture debate — the SEs will love challenging the AI and watching it reason about trade-offs. 15 minutes of deployment. 7 minutes to package it all up. They leave with a GitHub repo, documentation, and a running prototype. Not a business card.
+          </aside>
+        </section>
+
+        <!-- GIF: Hold my beer / confidence -->
+        <section data-background-color="#09090b">
+          <div class="gif-slide">
+            <div class="meme-overlay">
+              <img data-src="https://media.giphy.com/media/3o7btNhMBytxAM6YBa/giphy.gif" alt="Hold my beer" />
+              <div class="meme-text top">No slides? No prep?</div>
+              <div class="meme-text bottom">Hold my Azure subscription</div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section>
+        <section data-background-gradient="linear-gradient(135deg, #09090b 0%, #0c1929 50%, #09090b 100%)">
+          <div class="pill pill-azure">The bigger picture</div>
+          <h2>"Can't <span class="highlight">Copilot</span> do this?"</h2>
+          <br/>
+          <div class="two-col">
+            <div>
+              <h3 style="font-size:1em; color:rgba(255,255,255,0.4);">The question you're thinking</h3>
+              <ul>
+                <li>GitHub Copilot writes code</li>
+                <li>Copilot Studio builds agents</li>
+                <li>Azure AI Agent Service exists</li>
+                <li>So why does this matter?</li>
+              </ul>
+            </div>
+            <div>
+              <h3 style="font-size:1em; color:var(--azure-light);">The answer</h3>
+              <ul>
+                <li style="color:var(--emerald)">Copilot writes code. Agents <em>operate infrastructure</em>.</li>
+                <li style="color:var(--emerald)">This pattern works with ANY agent</li>
+                <li style="color:var(--emerald)">Your customers will bring their own agents</li>
+                <li style="color:var(--emerald)"><strong>Azure is the platform that makes it all work</strong></li>
+              </ul>
+            </div>
+          </div>
+          <aside class="notes">
+            I know what you're thinking. Copilot can do this. And you're partially right — Copilot writes great code. But there's a difference between an AI that writes code and an AI that operates your cloud. Deploys infrastructure. Responds to incidents at 3 AM. Optimizes costs weekly. The agent framework doesn't matter — OpenClaw, Copilot Studio, custom builds. What matters is the platform underneath. And that's Azure. Identity, RBAC, Cost Management, App Insights, Graph API — that's what makes agents useful. Your customers will bring their own agents. Azure should be ready.
+          </aside>
+        </section>
+
+        <section data-background-color="#09090b">
+          <h2>The tool doesn't matter.<br/><span class="highlight">The platform does.</span></h2>
+          <br/>
+          <div class="three-col">
+            <div class="card" style="border-color:rgba(0,120,212,0.3);">
+              <h4 style="color:var(--azure-light)">🔐 Identity & RBAC</h4>
+              <p>Agents need secure, scoped access. Azure AD + Managed Identity = solved.</p>
+            </div>
+            <div class="card" style="border-color:rgba(16,185,129,0.3);">
+              <h4 style="color:var(--emerald)">📊 Observability</h4>
+              <p>App Insights, Log Analytics, KQL — agents need eyes. Azure has the best.</p>
+            </div>
+            <div class="card" style="border-color:rgba(245,158,11,0.3);">
+              <h4 style="color:var(--amber)">💰 Cost Management</h4>
+              <p>Real-time cost APIs, budgets, alerts. Agents can optimize what they can measure.</p>
+            </div>
+          </div>
+          <br/>
+          <p style="font-size:0.7em; color:rgba(255,255,255,0.5);">
+            This is why Azure wins the agentic era — not because of the agent, but because of everything around it.
+          </p>
+          <aside class="notes">
+            Azure wins the agentic era because of three things: Identity — agents need secure, scoped access. Observability — agents need to see what's happening. Cost management — agents can only optimize what they can measure. No other cloud has this combination as mature and integrated. The agent is replaceable. The platform isn't.
+          </aside>
+        </section>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- SECURITY, GOVERNANCE, GUARDRAILS -->
+      <!-- ============================================ -->
+      <section>
+        <section data-background-gradient="linear-gradient(135deg, #09090b 0%, #1a0a0a 100%)">
+          <div class="section-divider">
+            <div class="pill pill-red">The elephant in the room</div>
+            <h2>"But isn't giving an AI<br/><span style="color:var(--red)">cloud access dangerous?</span>"</h2>
+            <p>Security. Governance. Guardrails. Traceability.</p>
+          </div>
+          <aside class="notes">
+            Now — the question every CISO, every compliance officer, every responsible engineer is thinking. "You're giving an AI agent access to production infrastructure? Are you insane?" Fair question. Let me show you why Azure makes this safe.
+          </aside>
+        </section>
+
+        <section data-background-color="#09090b">
+          <span class="big-emoji">🛡️</span>
+          <h2>Security by <span class="highlight">design</span></h2>
+          <br/>
+          <div class="three-col">
+            <div class="card" style="border-color:rgba(239,68,68,0.3);">
+              <h4 style="color:var(--red)">🔐 Least Privilege</h4>
+              <p>Agents get scoped tokens, not admin keys. Managed Identity + RBAC = the agent can only touch what you allow. Time-limited, revocable.</p>
+            </div>
+            <div class="card" style="border-color:rgba(245,158,11,0.3);">
+              <h4 style="color:var(--amber)">🚧 Guardrails</h4>
+              <p>Destructive actions require human approval. Delete a resource group? Agent asks first. Deploy to production? Gated. No YOLO mode.</p>
+            </div>
+            <div class="card" style="border-color:rgba(139,92,246,0.3);">
+              <h4 style="color:var(--violet)">🧱 Blast Radius</h4>
+              <p>Sandboxed execution. Agents operate in defined resource groups, subscriptions, and policy boundaries. Azure Policy enforces what code can't.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            Three layers of security. First — least privilege. The agent doesn't get admin access. It gets a Managed Identity with specific RBAC roles. It can deploy to dev but not prod. It can read costs but not delete subscriptions. Second — guardrails. Destructive actions require human approval. The agent ASKS before it deletes. Third — blast radius. Azure Policy, resource locks, and subscription boundaries contain the agent. Even if it goes rogue, damage is limited.
+          </aside>
+        </section>
+
+        <section data-background-color="#09090b">
+          <span class="big-emoji">📋</span>
+          <h2>Governance & <span class="highlight-amber">Traceability</span></h2>
+          <br/>
+          <div class="three-col">
+            <div class="card" style="border-color:rgba(6,182,212,0.3);">
+              <h4 style="color:var(--cyan)">📝 Full Audit Trail</h4>
+              <p>Every action logged. Azure Activity Log + agent session transcripts = complete chain of custody. Who asked, what the agent did, when, and why.</p>
+            </div>
+            <div class="card" style="border-color:rgba(16,185,129,0.3);">
+              <h4 style="color:var(--emerald)">⚖️ Azure Policy</h4>
+              <p>Enforce compliance at the platform level. Agent can't create resources that violate policy — even if it tries. Deny by default.</p>
+            </div>
+            <div class="card" style="border-color:rgba(249,115,22,0.3);">
+              <h4 style="color:var(--orange)">🔍 Explainability</h4>
+              <p>Agent explains its reasoning before acting. "I'm going to scale down these VMs because..." Full transparency. No black boxes.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            Governance. Every single action the agent takes is logged in Azure Activity Log AND in the agent's own session transcript. Full traceability — who asked it, what it did, what reasoning it used. Azure Policy enforces compliance at the platform level — the agent literally cannot create non-compliant resources. And explainability — the agent tells you WHY it's doing something before it does it. No black boxes.
+          </aside>
+        </section>
+
+        <section data-background-color="#0d1117">
+          <h3 style="font-size:0.8em; color:rgba(255,255,255,0.4);">The governance stack</h3>
+          <br/>
+          <div class="flow" style="flex-wrap:wrap; gap:12px;">
+            <div class="flow-step" style="border-color:var(--red);">🔐<br/>Azure AD<br/><small style="color:rgba(255,255,255,0.3)">Identity & RBAC</small></div>
+            <div class="flow-arrow">+</div>
+            <div class="flow-step" style="border-color:var(--amber);">⚖️<br/>Azure Policy<br/><small style="color:rgba(255,255,255,0.3)">Compliance</small></div>
+            <div class="flow-arrow">+</div>
+            <div class="flow-step" style="border-color:var(--cyan);">📝<br/>Activity Log<br/><small style="color:rgba(255,255,255,0.3)">Audit trail</small></div>
+            <div class="flow-arrow">+</div>
+            <div class="flow-step" style="border-color:var(--emerald);">🔒<br/>Resource Locks<br/><small style="color:rgba(255,255,255,0.3)">Prevent deletion</small></div>
+            <div class="flow-arrow">+</div>
+            <div class="flow-step" style="border-color:var(--violet);">🚧<br/>Human Approval<br/><small style="color:rgba(255,255,255,0.3)">Gate destructive ops</small></div>
+          </div>
+          <br/>
+          <p style="font-size:0.7em; color:rgba(255,255,255,0.5); margin-top:20px;">
+            Agents don't bypass governance — they <strong>operate within it</strong>.
+          </p>
+          <aside class="notes">
+            Here's the full governance stack. Azure AD for identity, Azure Policy for compliance, Activity Log for audit, Resource Locks to prevent accidental deletion, and human-in-the-loop approval for destructive operations. The agent doesn't bypass your governance — it operates within it. That's the whole point. Azure's governance layer was built for humans. Turns out, it works even better for AI agents — because agents actually follow the rules.
+          </aside>
+        </section>
+
+        <section data-background-color="#09090b">
+          <div class="big-quote">
+            "Azure's governance was built for humans.<br/>
+            Turns out, <span class="highlight">AI agents follow the rules better.</span>"
+            <span class="attribution">— The line that wins over the CISO</span>
+          </div>
+          <aside class="notes">
+            This is the line that wins over the CISO. Humans skip steps, forget to tag resources, leave dev environments running. Agents don't. They follow RBAC to the letter. They respect policies. They log everything. Azure governance was designed for humans — agents are actually better at following it.
+          </aside>
+        </section>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- WHAT THIS MEANS -->
+      <!-- ============================================ -->
+      <section>
+        <section data-background-gradient="linear-gradient(135deg, #09090b 0%, #0c1929 50%, #09090b 100%)">
+          <div class="pill pill-azure">For your customers</div>
+          <h2>What this <span class="highlight">means</span></h2>
+          <br/>
+          <div class="three-col">
+            <div class="card" style="border-color:rgba(16,185,129,0.3);">
+              <img src="https://img.icons8.com/fluency/48/flash-on.png" alt="" style="height:40px; margin-bottom:10px;" />
+              <h4 style="color:var(--emerald)">Speed</h4>
+              <p>Weeks of work compressed into a single meeting. Prototypes, not proposals.</p>
+            </div>
+            <div class="card" style="border-color:rgba(0,120,212,0.3);">
+              <img src="https://img.icons8.com/fluency/48/settings.png" alt="" style="height:40px; margin-bottom:10px;" />
+              <h4 style="color:var(--azure-light)">Operations</h4>
+              <p>24/7 cloud management from a chat. Incidents resolved in minutes, not hours.</p>
+            </div>
+            <div class="card" style="border-color:rgba(245,158,11,0.3);">
+              <img src="https://img.icons8.com/fluency/48/money-bag.png" alt="" style="height:40px; margin-bottom:10px;" />
+              <h4 style="color:var(--amber)">Savings</h4>
+              <p>Continuous cost optimization. Not annual reviews — real-time, automated FinOps.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            For your customers, this means three things. Speed — they get prototypes, not proposals. Operations — their cloud is managed 24/7 from a chat. Savings — continuous optimization, not annual reviews.
+          </aside>
+        </section>
+
+        <section data-background-color="#09090b">
+          <div class="pill pill-azure">For you</div>
+          <h2>A new <span class="highlight">sales motion</span></h2>
+          <br/>
+          <div class="two-col">
+            <div>
+              <h3 style="font-size:1em; color:rgba(255,255,255,0.4);">Before</h3>
+              <ul>
+                <li>PowerPoint with architecture diagrams</li>
+                <li>"Imagine if you could..."</li>
+                <li>Follow-up in 2 weeks</li>
+                <li>POC takes 3 months</li>
+              </ul>
+            </div>
+            <div>
+              <h3 style="font-size:1em; color:var(--azure-light);">After</h3>
+              <ul>
+                <li style="color:var(--emerald)">Live architecture from their words</li>
+                <li style="color:var(--emerald)">Here — look at it running</li>
+                <li style="color:var(--emerald)">They leave with a prototype</li>
+                <li style="color:var(--emerald)">POC happens in the meeting</li>
+              </ul>
+            </div>
+          </div>
+          <aside class="notes">
+            And for you — this is a completely new way to sell Azure. No more death by PowerPoint. No more "imagine if." The POC happens in the meeting. The customer leaves with something running. That changes the conversation entirely.
+          </aside>
+        </section>
+
+        <!-- GIF: Drake meme style -->
+        <section data-background-color="#09090b">
+          <div class="gif-slide">
+            <div class="meme-overlay">
+              <img data-src="https://media.giphy.com/media/d3mlE7uhX8KFgEmY/giphy.gif" alt="Impressed" />
+              <div class="meme-text top">PowerPoint with Azure diagrams?</div>
+              <div class="meme-text bottom">Live deploy in the meeting 🚀</div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- CLOSE -->
+      <!-- ============================================ -->
+      <section>
+        <section data-background-gradient="linear-gradient(135deg, #09090b 0%, #0c1929 50%, #09090b 100%)">
+          <span class="huge-emoji">☁️</span>
+          <h2>Every meeting ends with<br/><span class="highlight">something running.</span></h2>
+          <p class="tagline">
+            The agent doesn't matter. The platform does.<br/>
+            And that platform is <span class="highlight">Azure</span>.
+          </p>
+          <aside class="notes">
+            Every meeting ends with something running. Not a slide deck. Not a follow-up email. Something the customer can click, test, and show their boss. The agent framework will keep changing — Copilot, open source, custom builds. But Azure is where it all runs. That's the story to tell your customers.
+          </aside>
+        </section>
+
+        <section data-background-color="#09090b">
+          <h2>Let's <span class="highlight">talk</span>.</h2>
+          <br/>
+          <div style="font-size:0.7em; color:rgba(255,255,255,0.6); line-height:2.2; text-align:center;">
+            <p><img src="https://img.icons8.com/fluency/32/robot-2.png" alt="" style="height:22px; vertical-align:middle; margin-right:8px;" /><strong>OpenClaw</strong> — <a href="https://openclaw.ai" style="color:var(--azure-light)">openclaw.ai</a></p>
+            <p><img src="https://img.icons8.com/fluency/32/linkedin.png" alt="" style="height:22px; vertical-align:middle; margin-right:8px;" /><strong>Raj</strong> — rajkumarb@outlook.com</p>
+            <p><img src="https://img.icons8.com/fluency/32/monitor.png" alt="" style="height:22px; vertical-align:middle; margin-right:8px;" /><strong>Scenarios</strong> — <a href="https://agreeable-hill-06221f603.4.azurestaticapps.net" style="color:var(--azure-light)">Demo Showcase App</a></p>
+          </div>
+          <br/><br/>
+          <p style="font-size:0.5em; color:rgba(255,255,255,0.25);">
+            Questions? Let's answer them live — with OpenClaw, of course. 😉
+          </p>
+          <aside class="notes">
+            Thank you. I'm happy to take questions — and if you want, we can answer some of them with OpenClaw in real-time. Because the best demo of an AI agent... is using it.
+          </aside>
+        </section>
+
+        <!-- GIF: Thank you / mic drop -->
+        <section data-background-color="#09090b">
+          <div class="gif-slide">
+            <img data-src="https://media.giphy.com/media/3o7qDEq2bMbcbPRQ2c/giphy.gif" alt="Mic drop" style="max-height:380px;" />
+            <p class="gif-caption">Any questions? 🎤</p>
+          </div>
+        </section>
+      </section>
+
+    </div><!-- /slides -->
+  </div><!-- /reveal -->
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/zoom/zoom.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: 'c/t',
+      showSlideNumber: 'speaker',
+      width: 1280,
+      height: 720,
+      margin: 0.08,
+      transition: 'slide',
+      transitionSpeed: 'default',
+      backgroundTransition: 'fade',
+      controls: true,
+      controlsTutorial: false,
+      progress: true,
+      center: true,
+      plugins: [RevealNotes, RevealHighlight, RevealZoom],
+    });
+  </script>
+</body>
+</html>

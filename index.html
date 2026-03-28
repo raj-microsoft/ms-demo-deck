@@ -305,6 +305,43 @@
       pointer-events: none;
     }
 
+    /* Mobile alignment fix */
+    @media screen and (max-width: 800px) {
+      .reveal .slides section,
+      .reveal .slides section p,
+      .reveal .slides section h1,
+      .reveal .slides section h2,
+      .reveal .slides section h3,
+      .reveal .slides section h4,
+      .reveal .slides section .tagline,
+      .reveal .slides section .subtitle,
+      .reveal .slides section .big-quote,
+      .reveal .slides section .wow,
+      .reveal .slides section .stat,
+      .reveal .slides section .section-divider h2,
+      .reveal .slides section .section-divider p {
+        text-align: center !important;
+      }
+      .reveal .slides section {
+        padding: 20px 30px !important;
+      }
+      .three-col, .two-col {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+      }
+      .flow {
+        flex-direction: column !important;
+        gap: 8px !important;
+      }
+      .flow-arrow {
+        transform: rotate(90deg);
+      }
+      .stats-row {
+        flex-direction: column !important;
+        gap: 24px !important;
+      }
+    }
+
     /* Level bar chart */
     .level-bar {
       display: flex;
